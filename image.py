@@ -78,6 +78,8 @@ def image_resize():
                     count = count + 1
                 else:
                     flag = False
+        elif (value[2]=='Title'):
+            thumbnail_filename = os.path.join(os.path.dirname(src_filename), parent_dir + "_title_image.png")
         else:
             thumbnail_filename = os.path.join(os.path.dirname(src_filename), parent_dir + "_small_image.png")
  
@@ -177,7 +179,7 @@ def validate_input(new_value):
 Comboxlist_label = Label(root, text="選擇要變更的大小")
 Comboxlist_label.pack()
 Comboxlist = ttk.Combobox(root, values=[
-    "2560x1440xBig", "2560x1440xSlide", "600x900"])  # 初始化
+    "2560x1440xBig", "2560x1440xSlide", "600x900", "960x540xTitle"])  # 初始化
 Comboxlist.pack(pady=10)
 
 
