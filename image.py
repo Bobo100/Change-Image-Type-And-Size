@@ -17,19 +17,24 @@ input_files_listbox = Listbox(root, selectmode=MULTIPLE)
 input_files_listbox.pack(fill=BOTH, expand=1)
 
 # set the filetypes to .jpg, .png and .tiff
-filetypes = [("JPEG", "*.jpg"), ("PNG", "*.png"), ("TIFF", "*.tiff")]
+filetypes = [("all" ,"*.*"),
+            ("JPEG", "*.jpg"), ("PNG", "*.png"), 
+             ("TIFF", "*.tiff"), ("jfif", "*.jfif"), 
+             ("bmp", "*.bmp"), ("gif", "*.gif")]
 
 
 def add_files():
+    
     # show file dialog
     files = filedialog.askopenfilenames(
         filetypes=filetypes, title="Select files to convert")
+    
 
     # add files to listbox
-    for file in files:
-        input_files.append(file)
-        
-        input_files_listbox.insert(END, os.path.basename(file))
+    for file in files:        
+        if file not in input_files:        
+            input_files.append(file)
+            input_files_listbox.insert(END, os.path.basename(file))
 
 
 # add files button
@@ -57,10 +62,25 @@ def image_resize():
     for index in input_files_listbox.curselection():
         src_filename = input_files[index]
         print(src_filename)
+        # 取得父親資料夾的名稱
+        parent_dir = os.path.basename(os.path.dirname(src_filename))        
         # 目标图片（缩略图）的命名
-        fname, fextension = os.path.splitext(src_filename)
-        thumbnail_filename = fname + '-{}x{}'.format(dst_width, dst_height) + fextension
-        # thumbnail_filename = fname + fextension
+        if (value[2]=='Big'):
+            thumbnail_filename = os.path.join(os.path.dirname(src_filename), parent_dir + "_big_image.png")
+        elif (value[2]=='Slide'):
+            flag = True
+            count = 1
+            while(flag):
+                str_count = str(count)
+                thumbnail_filename = os.path.join(os.path.dirname(src_filename), parent_dir + "_slides_image_0" + str_count + ".png")
+            
+                if(os.path.exists(thumbnail_filename)):
+                    count = count + 1
+                else:
+                    flag = False
+        else:
+            thumbnail_filename = os.path.join(os.path.dirname(src_filename), parent_dir + "_small_image.png")
+ 
 
         # 打开原始图片
         src_image = Image.open(src_filename)
@@ -110,10 +130,10 @@ def image_resize():
         # 生成目标缩略图
         new_src_image.thumbnail((dst_width, dst_height))
         # 保存到磁盘上
-        new_src_image.save(thumbnail_filename)
+        new_src_image.save(thumbnail_filename, format='png', quality=100)
 
         logging.info('目标图片已生成: {}'.format(thumbnail_filename))
-        
+
         input_files_listbox.delete(index)
 
 
@@ -157,7 +177,7 @@ def validate_input(new_value):
 Comboxlist_label = Label(root, text="選擇要變更的大小")
 Comboxlist_label.pack()
 Comboxlist = ttk.Combobox(root, values=[
-    "2560x1440", "600x900"])  # 初始化
+    "2560x1440xBig", "2560x1440xSlide", "600x900"])  # 初始化
 Comboxlist.pack(pady=10)
 
 
