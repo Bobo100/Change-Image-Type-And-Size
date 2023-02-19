@@ -9,7 +9,6 @@ root.title("File Selector")
 
 root.geometry("600x900")
 
-
 # input files control
 input_files = []
 input_files_listbox = Listbox(root, selectmode=MULTIPLE)
