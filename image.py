@@ -62,8 +62,8 @@ def image_resize():
     for index in input_files_listbox.curselection():
         src_filename = input_files[index]
         print(src_filename)
-        # 取得父親資料夾的名稱
-        parent_dir = os.path.basename(os.path.dirname(src_filename))        
+        # 取得祖父親資料夾的名稱
+        parent_dir = os.path.basename(os.path.dirname(os.path.dirname(src_filename)))
         # 目标图片（缩略图）的命名
         if (value[2]=='Big'):
             thumbnail_filename = os.path.join(os.path.dirname(src_filename), parent_dir + "_big_image.png")
